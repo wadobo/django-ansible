@@ -1,0 +1,17 @@
+---
+- name: Downloading the project
+  sudo: true
+  sudo_user: "{{ prname }}"
+  git: repo={{ repo }} dest=/home/{{prname}}/{{ prname }} accept_hostkey=True
+
+- name: Creating the virtualenv
+  sudo: true
+  sudo_user: "{{ prname }}"
+  shell: virtualenv env
+  args:
+    chdir: /home/{{prname}}
+
+- name: Installing python packages
+  sudo: true
+  sudo_user: "{{ prname }}"
+  pip: virtualenv=/home/{{prname}}/env requirements=/home/{{prname}}/{{prname}}/requirements.txt

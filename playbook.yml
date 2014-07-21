@@ -1,0 +1,13 @@
+---
+- hosts: all
+  vars:
+    - dbuser: project
+    - dbpwd: project
+    - prname: project
+    - repo: git@github.com:wadobo/project.git
+
+  tasks:
+    - include: packages.yml
+    - include: postgres.yml
+    - include: user.yml
+    - include: repo.yml

@@ -1,0 +1,8 @@
+---
+- name: Creating default user
+  sudo: true
+  user: name={{ prname }} shell=/bin/bash
+
+- name: Copying ssh keys
+  sudo: true
+  copy: src=~/.ssh dest=/home/{{ prname }}/ owner={{ prname }} mode=600
