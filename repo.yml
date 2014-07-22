@@ -15,3 +15,51 @@
   sudo: true
   sudo_user: "{{ prname }}"
   pip: virtualenv=/home/{{prname}}/env requirements=/home/{{prname}}/{{prname}}/requirements.txt
+
+- name: Installing psycopg2 packages
+  sudo: true
+  sudo_user: "{{ prname }}"
+  pip: virtualenv=/home/{{prname}}/env name="psycopg2"
+
+- name: Installing uwsgi packages
+  sudo: true
+  sudo_user: "{{ prname }}"
+  pip: virtualenv=/home/{{prname}}/env name="uwsgi"
+
+- name: Creates webstatic directory
+  sudo: true
+  sudo_user: "{{ prname }}"
+  file: path=/home/{{prname}}/webstatic state=directory
+
+- name: Creating deploy settings
+  sudo: true
+  template: src=templates/deploy.py dest=/home/{{prname}}/{{prname}}/{{prname}}/{{prname}} owner="{{prname}}" mode=0644
+
+- name: Collect static
+  sudo: true
+  sudo_user: "{{ prname }}"
+  django_manage: command=collectstatic
+  args:
+    app_path: /home/{{prname}}/{{prname}}/{{prname}}
+    virtualenv: /home/{{prname}}/env
+    settings: "{{prname}}.deploy"
+
+- name: Syncdb
+  sudo: true
+  sudo_user: "{{ prname }}"
+  django_manage: command=syncdb
+  args:
+    app_path: /home/{{prname}}/{{prname}}/{{prname}}
+    virtualenv: /home/{{prname}}/env
+    settings: "{{prname}}.deploy"
+
+- name: Migrate
+  sudo: true
+  sudo_user: "{{ prname }}"
+  shell: /home/{{prname}}/env/bin/python manage.py migrate --no-initial-data --settings={{prname}}.deploy
+  args:
+    chdir: /home/{{prname}}/{{prname}}/{{prname}}
+
+- name: Creating uwsgi settings
+  sudo: true
+  template: src=templates/uwsgi.ini dest=/home/{{prname}}/uwsgi.ini owner="{{prname}}" mode=0644

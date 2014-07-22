@@ -5,9 +5,12 @@
     - dbpwd: project
     - prname: project
     - repo: git@github.com:wadobo/project.git
+    - appport: 4086
 
   tasks:
     - include: packages.yml
     - include: postgres.yml
     - include: user.yml
     - include: repo.yml
+    - include: supervisor.yml
+    - include: nginx.yml

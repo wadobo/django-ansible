@@ -1,1 +1,8 @@
 ---
+- name: Creating nginx conf
+  sudo: true
+  template: src=templates/nginx.conf dest=/etc/nginx/sites-available/default owner="root" mode=0644
+
+- name: Restarting nginx
+  sudo: true
+  service: name=nginx state=restarted
